@@ -1,0 +1,70 @@
+{
+  "name": "Claude Flow Codespace",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/aws-cli:1": {
+      "version": "latest"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "bash .devcontainer/configure-secrets.sh",
+
+  "remoteEnv": {
+    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
+    "AZURE_SUBSCRIPTION_ID": "${localEnv:AZURE_SUBSCRIPTION_ID}",
+    "AZURE_TENANT_ID": "${localEnv:AZURE_TENANT_ID}",
+    "AZURE_CLIENT_ID": "${localEnv:AZURE_CLIENT_ID}",
+    "AZURE_CLIENT_SECRET": "${localEnv:AZURE_CLIENT_SECRET}",
+    "AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
+    "AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}",
+    "AWS_DEFAULT_REGION": "${localEnv:AWS_DEFAULT_REGION}",
+    "PATH": "${containerEnv:PATH}:/usr/local/share/npm-global/bin:${containerEnv:HOME}/.npm-global/bin"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-azuretools.vscode-azurecli",
+        "amazonwebservices.aws-toolkit-vscode",
+        "GitHub.copilot"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "files.watcherExclude": {
+          "**/node_modules/**": true
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [3000, 8000, 8080],
+
+  "portsAttributes": {
+    "3000": {
+      "label": "Application",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Dev Server",
+      "onAutoForward": "notify"
+    },
+    "8080": {
+      "label": "Alt Server",
+      "onAutoForward": "notify"
+    }
+  }
+}
